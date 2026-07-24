@@ -1,0 +1,79 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "docker:pinDigests",
+    "group:all"
+  ],
+  "labels": ["dependencies", "renovate"],
+  "schedule": ["before 6am every day"],
+  "timezone": "UTC",
+  "automerge": false,
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "🤖 Renovate Dependency Dashboard",
+  "prCreation": "immediate",
+  "prConcurrentLimit": 3,
+  "recreateWhen": "auto",
+  "rebaseWhen": "conflicted",
+  "commitMessagePrefix": "⬆️",
+  "commitMessageAction": "Update",
+  "commitMessageTopic": "{{depName}}",
+  "platformAutomerge": false,
+  "reviewersFromCodeOwners": false,
+  // =========================================================================
+  // Regex Manager: Sync vaultwarden/config.yaml version with Docker tags
+  // =========================================================================
+  // Matches the `version: "X.Y.Z"` field in the add-on config and treats it
+  // as the vaultwarden/server Docker tag. When a new vaultwarden release is
+  // published, Renovate creates a PR updating this version.
+  //
+  // The HA add-on builder passes this version as BUILD_VERSION to the
+  // Dockerfile at build time, so config.yaml is the single source of truth.
+  // =========================================================================
+  "regexManagers": [
+    {
+      "description": [
+        "Update the add-on version in vaultwarden/config.yaml to match",
+        "the latest vaultwarden/server Docker image tag."
+      ],
+      "fileMatch": ["^vaultwarden/config\\.yaml$"],
+      "matchStrings": [
+        "^version: \"(?<currentValue>\\d+\\.\\d+\\.\\d+)\"$"
+      ],
+      "depNameTemplate": "vaultwarden/server",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "semver"
+    }
+  ],
+  // =========================================================================
+  // Package Rules
+  // =========================================================================
+  "packageRules": [
+    {
+      "description": "Vaultwarden add-on version updates — PR with release notes",
+      "matchManagers": ["regex"],
+      "matchDepNames": ["vaultwarden/server"],
+      "labels": ["vaultwarden", "version-update"],
+      "commitMessagePrefix": "⬆️",
+      "commitMessageTopic": "Vaultwarden to v{{newVersion}}",
+      "prTitle": "⬆️ Update Vaultwarden to v{{newVersion}}",
+      "prBodyNotes": [
+        "This PR updates Vaultwarden to version **v{{newVersion}}**.",
+        "",
+        "### Release Notes",
+        "See the [Vaultwarden Releases]",
+        "(https://github.com/dani-garcia/vaultwarden/releases/tag/v{{newVersion}})",
+        "for details."
+      ],
+      "groupName": null,
+      "separateMultipleMinor": false
+    }
+  ],
+  // =========================================================================
+  // Ignore files we don't want Renovate touching
+  // =========================================================================
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/bower_components/**"
+  ]
+}

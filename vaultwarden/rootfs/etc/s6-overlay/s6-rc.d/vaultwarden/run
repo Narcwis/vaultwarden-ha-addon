@@ -1,0 +1,55 @@
+#!/command/execlineb -P
+
+# =============================================================================
+# s6-overlay service runner for Vaultwarden
+# =============================================================================
+# Reads HA add-on configuration from /data/options.json and launches vaultwarden
+# with the appropriate environment variables.
+# =============================================================================
+
+with-contenv
+bashio -c '
+set -e
+
+# Log prefix
+log() { echo "[vaultwarden] $*"; }
+
+# ---------------------------------------------------------------------------
+# Read options from Home Assistant add-on configuration
+# ---------------------------------------------------------------------------
+SIGNUPS_ALLOWED=$(bashio::config "signups_allowed")
+DOMAIN=$(bashio::config "domain" "")
+
+log "Configured signups_allowed=${SIGNUPS_ALLOWED}"
+
+# ---------------------------------------------------------------------------
+# Set environment variables for vaultwarden
+# ---------------------------------------------------------------------------
+export SIGNUPS_ALLOWED="${SIGNUPS_ALLOWED}"
+export DATA_FOLDER="/data"
+export WEB_VAULT_FOLDER="/web-vault"
+export ROCKET_PORT=80
+export ROCKET_ADDRESS="0.0.0.0"
+export ROCKET_LOG="critical"
+export LOG_FILE="/data/vaultwarden.log"
+
+if [ -n "${DOMAIN}" ]; then
+    export DOMAIN="${DOMAIN}"
+    log "Domain set to ${DOMAIN}"
+fi
+
+# ---------------------------------------------------------------------------
+# Ensure correct permissions
+# ---------------------------------------------------------------------------
+if [ -d "/data" ]; then
+    chown -R vaultwarden:vaultwarden /data
+    chmod 700 /data
+fi
+
+log "Starting vaultwarden..."
+
+# ---------------------------------------------------------------------------
+# Run vaultwarden as the vaultwarden user
+# ---------------------------------------------------------------------------
+exec s6-setuidgid vaultwarden /usr/local/bin/vaultwarden
+'
