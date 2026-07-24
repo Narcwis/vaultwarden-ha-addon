@@ -19,11 +19,10 @@ log() { echo "[vaultwarden] $*"; }
 # ---------------------------------------------------------------------------
 SIGNUPS_ALLOWED=$(bashio::config "signups_allowed")
 DOMAIN=$(bashio::config "domain" "")
-PORT=$(bashio::config "port" 80)
 NOTIFICATIONS_PORT=$(bashio::config "notifications_port" 3012)
 ADMIN_TOKEN=$(bashio::config "admin_token" "")
 
-log "Configured signups_allowed=${SIGNUPS_ALLOWED} port=${PORT}"
+log "Configured signups_allowed=${SIGNUPS_ALLOWED}"
 
 # ---------------------------------------------------------------------------
 # Set environment variables for vaultwarden
@@ -31,7 +30,7 @@ log "Configured signups_allowed=${SIGNUPS_ALLOWED} port=${PORT}"
 export SIGNUPS_ALLOWED="${SIGNUPS_ALLOWED}"
 export DATA_FOLDER="/data"
 export WEB_VAULT_FOLDER="/web-vault"
-export ROCKET_PORT="${PORT}"
+export ROCKET_PORT=80
 export ROCKET_ADDRESS="0.0.0.0"
 export ROCKET_LOG="critical"
 export LOG_FILE="/data/vaultwarden.log"
@@ -61,7 +60,7 @@ if [ -d "/data" ]; then
     chmod 700 /data
 fi
 
-log "Starting vaultwarden on port ${PORT}..."
+log "Starting vaultwarden..."
 
 # ---------------------------------------------------------------------------
 # Run vaultwarden as the vaultwarden user
