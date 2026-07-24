@@ -1,8 +1,9 @@
 # Changelog — Vaultwarden Add-on
 
-## [1.33.2] — 2025-02-15
+## [1.37.0] — 2025-07-24
 
-- Initial add-on release
-- Based on Vaultwarden v1.33.2
-- Supports all Home Assistant architectures
-- Multi-stage Docker build from official vaultwarden/server image
+- Updated Vaultwarden to v1.37.0
+- Added configurable `port` option for internal web port
+- Added configurable `notifications_port` option for WebSocket notifications
+- Added `admin_token` option for admin panel access
+- Exposed port 3012/tcp for WebSocket notifications
