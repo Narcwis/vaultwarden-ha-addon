@@ -9,17 +9,26 @@
 
 with-contenv
 bashio -c '
-set -e
-
 # Log prefix
 log() { echo "[vaultwarden] $*"; }
 
 # ---------------------------------------------------------------------------
-# Read options from Home Assistant add-on configuration
+# Read options from /data/options.json directly (more reliable than bashio
+# in s6 context) and export as Vaultwarden environment variables.
 # ---------------------------------------------------------------------------
-SIGNUPS_ALLOWED=$(bashio::config "signups_allowed")
-DOMAIN=$(bashio::config "domain" "")
-ADMIN_TOKEN=$(bashio::config "admin_token" "")
+OPTIONS_FILE="/data/options.json"
+
+if [ -f "${OPTIONS_FILE}" ]; then
+    # Parse JSON using jq (which is included in the HA base image)
+    SIGNUPS_ALLOWED=$(jq -r ".signups_allowed // false" "${OPTIONS_FILE}")
+    DOMAIN=$(jq -r ".domain // empty" "${OPTIONS_FILE}")
+    ADMIN_TOKEN=$(jq -r ".admin_token // empty" "${OPTIONS_FILE}")
+else
+    log "WARNING: ${OPTIONS_FILE} not found, using defaults"
+    SIGNUPS_ALLOWED=false
+    DOMAIN=""
+    ADMIN_TOKEN=""
+fi
 
 log "Configured signups_allowed=${SIGNUPS_ALLOWED}"
 
@@ -52,7 +61,7 @@ if [ -d "/data" ]; then
     chmod 700 /data
 fi
 
-log "Starting vaultwarden..."
+log "Starting vaultwarden with signups_allowed=${SIGNUPS_ALLOWED}..."
 
 # ---------------------------------------------------------------------------
 # Run vaultwarden as the vaultwarden user
