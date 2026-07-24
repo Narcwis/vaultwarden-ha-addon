@@ -40,9 +40,8 @@ COPY rootfs /
 WORKDIR /data
 VOLUME ["/data"]
 
-# Expose ports
+# Expose web interface port
 EXPOSE 80
-EXPOSE 3012
 
 # Labels required by Home Assistant
 LABEL \

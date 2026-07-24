@@ -14,20 +14,16 @@ panel_title: "Vaultwarden"
 homeassistant: "2023.8.0"
 ports:
   80/tcp: 80
-  3012/tcp: 3012
 ports_description:
   80/tcp: "Vaultwarden web interface and API"
-  3012/tcp: "WebSocket notifications (requires notifications_port)"
 map:
   - config:rw
   - ssl
 webui: "http://[HOST]:[PORT:80]"
 options:
   signups_allowed: false
-  notifications_port: 3012
 schema:
   signups_allowed: bool
   domain: "str?"
-  notifications_port: "int(0,65535)?"
   admin_token: "str?"
 image: vaultwarden/server
