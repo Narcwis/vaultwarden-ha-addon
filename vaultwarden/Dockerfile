@@ -15,6 +15,7 @@ COPY rootfs/ /
 
 WORKDIR /data
 VOLUME ["/data"]
+ENV WEB_VAULT_FOLDER=/web-vault
 
 EXPOSE 80
 
