@@ -1,5 +1,9 @@
 # Changelog — Vaultwarden Add-on
 
+## [1.6] — 2026-07-25
+
+- Fixed web vault path — explicitly set `WEB_VAULT_FOLDER=/web-vault` in Dockerfile
+
 ## [1.5] — 2026-07-25
 
 - Removed s6-overlay — switched to single-stage build from official vaultwarden/server image
