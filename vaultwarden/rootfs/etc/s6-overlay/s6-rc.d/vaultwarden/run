@@ -23,11 +23,13 @@ if [ -f "${OPTIONS_FILE}" ]; then
     SIGNUPS_ALLOWED=$(jq -r ".signups_allowed // false" "${OPTIONS_FILE}")
     DOMAIN=$(jq -r ".domain // empty" "${OPTIONS_FILE}")
     ADMIN_TOKEN=$(jq -r ".admin_token // empty" "${OPTIONS_FILE}")
+    DISABLE_ADMIN=$(jq -r ".disable_admin_panel // false" "${OPTIONS_FILE}")
 else
     log "WARNING: ${OPTIONS_FILE} not found, using defaults"
     SIGNUPS_ALLOWED=false
     DOMAIN=""
     ADMIN_TOKEN=""
+    DISABLE_ADMIN=false
 fi
 
 log "Configured signups_allowed=${SIGNUPS_ALLOWED}"
@@ -48,7 +50,7 @@ if [ -n "${DOMAIN}" ]; then
     log "Domain set to ${DOMAIN}"
 fi
 
-if [ -n "${ADMIN_TOKEN}" ]; then
+if [ -n "${ADMIN_TOKEN}" ] && [ "${DISABLE_ADMIN}" != "true" ]; then
     export ADMIN_TOKEN="${ADMIN_TOKEN}"
     log "Admin panel enabled"
 fi
