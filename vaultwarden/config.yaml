@@ -11,6 +11,8 @@ arch:
   - i386
 panel_icon: "mdi:form-textbox-password"
 panel_title: "Vaultwarden"
+icon: icon.png
+logo: logo.png
 homeassistant: "2023.8.0"
 ports:
   80/tcp: 80
