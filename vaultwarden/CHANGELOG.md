@@ -1,5 +1,9 @@
 # Changelog — Vaultwarden Add-on
 
+## [1.9] — 2026-07-25
+
+- Added logo and icon to addon
+
 ## [1.8] — 2026-07-25
 
 - Replaced jq with shell-based JSON parsing (avoids apk dependency)
