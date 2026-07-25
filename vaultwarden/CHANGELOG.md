@@ -1,5 +1,12 @@
 # Changelog — Vaultwarden Add-on
 
+## [1.5] — 2026-07-25
+
+- Removed s6-overlay — switched to single-stage build from official vaultwarden/server image
+- Addon options now passed as environment variables directly by HA supervisor
+- Added `entrypoint.sh` wrapper for `disable_admin_panel` transformation
+- Removed unused `map: config:rw` and `map: ssl` mounts
+
 ## [1.4] — 2026-07-25
 
 - Addon version 1.4 (bundles Vaultwarden 1.37.0)
