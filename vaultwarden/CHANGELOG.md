@@ -1,5 +1,10 @@
 # Changelog — Vaultwarden Add-on
 
+## [1.8] — 2026-07-25
+
+- Replaced jq with shell-based JSON parsing (avoids apk dependency)
+- Fixed undefined VAULTWARDEN_VERSION in LABEL
+
 ## [1.7] — 2026-07-25
 
 - Fixed env vars not being applied — entrypoint now reads `/data/options.json` directly via jq

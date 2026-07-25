@@ -9,16 +9,25 @@
 OPTIONS_FILE="/data/options.json"
 
 if [ -f "${OPTIONS_FILE}" ]; then
-    SIGNUPS_ALLOWED=$(jq -r ".signups_allowed // false" "${OPTIONS_FILE}")
-    DOMAIN=$(jq -r ".domain // empty" "${OPTIONS_FILE}")
-    ADMIN_TOKEN=$(jq -r ".admin_token // empty" "${OPTIONS_FILE}")
-    DISABLE_ADMIN=$(jq -r ".disable_admin_panel // false" "${OPTIONS_FILE}")
+    # Extract string values (e.g. "admin_token": "abc")
+    get_str() {
+        grep -o "\"$1\":[ ]*\"[^\"]*\"" "${OPTIONS_FILE}" | \
+            sed "s/.*: *\"//; s/\"$//"
+    }
 
-    export SIGNUPS_ALLOWED="${SIGNUPS_ALLOWED}"
+    # Extract boolean values (e.g. "signups_allowed": false)
+    get_bool() {
+        grep -o "\"$1\":[ ]*\(true\|false\)" "${OPTIONS_FILE}" | \
+            sed "s/.*: *//"
+    }
 
-    if [ -n "${DOMAIN}" ]; then
-        export DOMAIN="${DOMAIN}"
-    fi
+    SIGNUPS_ALLOWED=$(get_bool signups_allowed)
+    DOMAIN=$(get_str domain)
+    ADMIN_TOKEN=$(get_str admin_token)
+    DISABLE_ADMIN=$(get_bool disable_admin_panel)
+
+    [ -n "${SIGNUPS_ALLOWED}" ] && export SIGNUPS_ALLOWED="${SIGNUPS_ALLOWED}"
+    [ -n "${DOMAIN}" ] && export DOMAIN="${DOMAIN}"
 
     if [ -n "${ADMIN_TOKEN}" ] && [ "${DISABLE_ADMIN}" != "true" ]; then
         export ADMIN_TOKEN="${ADMIN_TOKEN}"

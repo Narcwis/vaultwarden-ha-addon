@@ -13,9 +13,7 @@ FROM vaultwarden/server:${VAULTWARDEN_VERSION}
 # Copy entrypoint wrapper
 COPY rootfs/ /
 
-# Install jq for parsing /data/options.json
-RUN apk add --no-cache jq
-
+ARG VAULTWARDEN_VERSION
 WORKDIR /data
 VOLUME ["/data"]
 ENV WEB_VAULT_FOLDER=/web-vault
