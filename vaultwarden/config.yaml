@@ -16,9 +16,6 @@ ports:
   80/tcp: 80
 ports_description:
   80/tcp: "Vaultwarden web interface and API"
-map:
-  - config:rw
-  - ssl
 webui: "http://[HOST]:[PORT:80]"
 options:
   signups_allowed: false
@@ -29,4 +26,3 @@ schema:
   domain: "str?"
   admin_token: "str?"
   disable_admin_panel: bool
-# image: vaultwarden/server  # removed — build from Dockerfile locally
