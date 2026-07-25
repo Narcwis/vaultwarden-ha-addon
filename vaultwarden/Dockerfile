@@ -16,7 +16,8 @@ COPY rootfs/ /
 ARG VAULTWARDEN_VERSION
 WORKDIR /data
 VOLUME ["/data"]
-ENV WEB_VAULT_FOLDER=/web-vault
+ENV DATA_FOLDER=/data \
+    WEB_VAULT_FOLDER=/web-vault
 
 EXPOSE 80
 

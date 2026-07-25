@@ -1,5 +1,9 @@
 # Changelog — Vaultwarden Add-on
 
+## [1.10] — 2026-07-25
+
+- Fixed data path — explicitly set `DATA_FOLDER=/data` so vaultwarden reads existing DB at `/data/db.sqlite3`
+
 ## [1.9] — 2026-07-25
 
 - Added logo and icon to addon
