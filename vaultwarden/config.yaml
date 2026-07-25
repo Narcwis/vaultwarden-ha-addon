@@ -22,6 +22,7 @@ map:
 webui: "http://[HOST]:[PORT:80]"
 options:
   signups_allowed: false
+  admin_token: ""
 schema:
   signups_allowed: bool
   domain: "str?"
