@@ -1,10 +1,10 @@
 # Changelog — Vaultwarden Add-on
 
-## [1.37.0-1] — 2026-07-25
+## [1.4] — 2026-07-25
 
+- Addon version 1.4 (bundles Vaultwarden 1.37.0)
 - Added `admin_token` to addon options with empty default
 - Added `disable_admin_panel` option to toggle admin dashboard visibility
-- Bumped addon version to 1.37.0-1
 
 ## [1.37.0] — 2025-07-24
 

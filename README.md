@@ -37,10 +37,17 @@ This add-on:
 
 ## Configuration
 
+| Version | |
+|---------|-|
+| Addon | 1.4 |
+| Vaultwarden | 1.37.0 |
+
 | Option | Default | Description |
 |--------|---------|-------------|
 | `signups_allowed` | `false` | Allow new user registration |
 | `domain` | (optional) | Set the domain for Vaultwarden (e.g., `https://vault.example.com`) |
+| `admin_token` | (optional) | Token for the admin panel at `/admin` |
+| `disable_admin_panel` | `false` | Disable the admin dashboard |
 
 ## Development
 
