@@ -1,5 +1,9 @@
 # Changelog — Vaultwarden Add-on
 
+## [1.7] — 2026-07-25
+
+- Fixed env vars not being applied — entrypoint now reads `/data/options.json` directly via jq
+
 ## [1.6] — 2026-07-25
 
 - Fixed web vault path — explicitly set `WEB_VAULT_FOLDER=/web-vault` in Dockerfile

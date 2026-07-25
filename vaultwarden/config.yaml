@@ -1,5 +1,5 @@
 name: "Vaultwarden"
-version: "1.6"
+version: "1.7"
 slug: "vaultwarden"
 description: "Vaultwarden — lightweight Bitwarden-compatible password manager server"
 url: "https://github.com/Narcwis/vaultwarden-ha-addon"

@@ -2,13 +2,27 @@
 # =============================================================================
 # Vaultwarden entrypoint wrapper for HA add-on
 # =============================================================================
-# The HA supervisor passes addon options as env vars. This wrapper applies
-# custom transformations before exec'ing the vaultwarden binary.
+# Reads addon options from /data/options.json (written by the supervisor),
+# applies custom transformations, then exec's vaultwarden.
 # =============================================================================
 
-# If the admin panel is explicitly disabled, strip the token
-if [ "${DISABLE_ADMIN_PANEL}" = "true" ]; then
-    unset ADMIN_TOKEN
+OPTIONS_FILE="/data/options.json"
+
+if [ -f "${OPTIONS_FILE}" ]; then
+    SIGNUPS_ALLOWED=$(jq -r ".signups_allowed // false" "${OPTIONS_FILE}")
+    DOMAIN=$(jq -r ".domain // empty" "${OPTIONS_FILE}")
+    ADMIN_TOKEN=$(jq -r ".admin_token // empty" "${OPTIONS_FILE}")
+    DISABLE_ADMIN=$(jq -r ".disable_admin_panel // false" "${OPTIONS_FILE}")
+
+    export SIGNUPS_ALLOWED="${SIGNUPS_ALLOWED}"
+
+    if [ -n "${DOMAIN}" ]; then
+        export DOMAIN="${DOMAIN}"
+    fi
+
+    if [ -n "${ADMIN_TOKEN}" ] && [ "${DISABLE_ADMIN}" != "true" ]; then
+        export ADMIN_TOKEN="${ADMIN_TOKEN}"
+    fi
 fi
 
 exec /vaultwarden
