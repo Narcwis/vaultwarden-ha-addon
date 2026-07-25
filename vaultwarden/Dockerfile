@@ -14,7 +14,7 @@
 # =============================================================================
 
 ARG BUILD_VERSION
-ARG BUILD_FROM
+ARG BUILD_FROM="ghcr.io/home-assistant/amd64-base:latest"
 
 # Stage 1 — Fetch vaultwarden binary and web vault from the official image
 # renovate: datasource=docker depName=vaultwarden/server versioning=docker
@@ -26,6 +26,7 @@ FROM ${BUILD_FROM}
 
 ARG BUILD_VERSION
 ARG BUILD_ARCH
+ARG VAULTWARDEN_VERSION
 
 # ── STABLE LAYERS (cached across version bumps) ──────────────────────────
 
