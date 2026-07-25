@@ -1,0 +1,12 @@
+# =============================================================================
+# .dockerignore — minimize build context for faster Docker builds
+# =============================================================================
+
+.git
+.gitignore
+.gitattributes
+*.md
+renovate.json5
+repository.yaml
+LICENSE
+.github

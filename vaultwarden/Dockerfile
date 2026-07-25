@@ -3,7 +3,14 @@
 # =============================================================================
 # Multi-stage build:
 #   1. Pull vaultwarden/server at the specified BUILD_VERSION
-#   2. Layer the binary onto the Home Assistant base image (BUILD_FROM)
+#   2. Layer onto the HA base image with optimal cache layering
+#
+# Cache strategy:
+#   - Stable layers (apk, user, rootfs) go FIRST so they never need
+#     rebuilding when vaultwarden version changes
+#   - Vaultwarden binary/web-vault copy + labels are LAST — only these
+#     layers invalidate on version bumps
+#   - Same-version restarts are fully cached → instant start
 # =============================================================================
 
 ARG BUILD_VERSION
@@ -18,17 +25,15 @@ FROM ${BUILD_FROM}
 ARG BUILD_VERSION
 ARG BUILD_ARCH
 
+# ── STABLE LAYERS (cached across version bumps) ──────────────────────────
+
 # Install runtime dependencies
 RUN \
     apk add --no-cache \
         curl \
         sqlite-libs
 
-# Copy vaultwarden binary and web vault from the source image
-COPY --from=vaultwarden_src /vaultwarden /usr/local/bin/vaultwarden
-COPY --from=vaultwarden_src /web-vault /web-vault
-
-# Create the vaultwarden user (uid/gid 1000 to match default HA expectations)
+# Create the vaultwarden user (uid/gid 1000)
 RUN \
     addgroup -g 1000 vaultwarden && \
     adduser -u 1000 -G vaultwarden -h /data -s /sbin/nologin -D vaultwarden
@@ -40,8 +45,13 @@ COPY rootfs /
 WORKDIR /data
 VOLUME ["/data"]
 
-# Expose web interface port
 EXPOSE 80
+
+# ── VAULTWARDEN LAYERS (invalidate only on version changes) ─────────────
+
+# Copy vaultwarden binary and web vault from source image
+COPY --from=vaultwarden_src /vaultwarden /usr/local/bin/vaultwarden
+COPY --from=vaultwarden_src /web-vault /web-vault
 
 # Labels required by Home Assistant
 LABEL \
