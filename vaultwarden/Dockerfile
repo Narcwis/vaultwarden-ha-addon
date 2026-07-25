@@ -17,7 +17,9 @@ ARG BUILD_VERSION
 ARG BUILD_FROM
 
 # Stage 1 — Fetch vaultwarden binary and web vault from the official image
-FROM vaultwarden/server:${BUILD_VERSION} AS vaultwarden_src
+# renovate: datasource=docker depName=vaultwarden/server versioning=docker
+ARG VAULTWARDEN_VERSION="1.37.0"
+FROM vaultwarden/server:${VAULTWARDEN_VERSION} AS vaultwarden_src
 
 # Stage 2 — Final HA-compatible image
 FROM ${BUILD_FROM}
@@ -59,7 +61,8 @@ LABEL \
     io.hass.description="Lightweight Bitwarden-compatible password manager" \
     io.hass.version="${BUILD_VERSION}" \
     io.hass.type="addon" \
-    io.hass.arch="${BUILD_ARCH:-amd64}"
+    io.hass.arch="${BUILD_ARCH:-amd64}" \
+    io.hass.vaultwarden_version="${VAULTWARDEN_VERSION}"
 
 # Health check
 HEALTHCHECK --interval=60s --timeout=10s --start-period=10s --retries=3 \

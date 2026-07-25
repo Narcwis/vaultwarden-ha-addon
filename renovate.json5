@@ -33,12 +33,12 @@
   "regexManagers": [
     {
       "description": [
-        "Update the add-on version in vaultwarden/config.yaml to match",
+        "Update VAULTWARDEN_VERSION in vaultwarden/Dockerfile to match",
         "the latest vaultwarden/server Docker image tag."
       ],
-      "fileMatch": ["^vaultwarden/config\\.yaml$"],
+      "fileMatch": ["^vaultwarden/Dockerfile$"],
       "matchStrings": [
-        "^version: \"(?<currentValue>\\d+\\.\\d+\\.\\d+)\"$"
+        "^ARG VAULTWARDEN_VERSION=\"(?<currentValue>\\d+\\.\\d+\\.\\d+)\"$"
       ],
       "depNameTemplate": "vaultwarden/server",
       "datasourceTemplate": "docker",
